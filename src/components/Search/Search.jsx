@@ -2,11 +2,6 @@ import { useContext } from "react";
 import { MainContext } from "../../contexts";
 const Search = () => {
     const {search, searchPlayerByAllyCode} = useContext(MainContext);
-
-    const isGoodKeyCode = (e) => {
-        let keyCode = e.keyCode;
-        return (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105)
-    };
     
     const handleChange = (e) => {
         const value = e.target.value;
