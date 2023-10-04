@@ -1,13 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import { Home } from "./pages";
+import { Home, Player } from "./pages";
+import { Header } from "./components";
 
 
 const App = () => {
     return (
-        <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/test" element="Hello Test"/>
-        </Routes>
+        <>
+            <Header/>
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/player/:allyCode" element={<Player/>}/>
+            </Routes>
+        </>
     );
 };
 
