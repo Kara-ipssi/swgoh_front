@@ -1,9 +1,8 @@
-import { Header, Hero } from "../../components";
+import { Hero } from "../../components";
 
 const Home  = () => {
     return(
         <div className="page">
-            <Header/>
             <Hero/>
         </div>
     )
