@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const api_url = process.env.REACT_APP_API_URL;
 
@@ -13,18 +14,20 @@ const MainProvider = ({children}) => {
     const [searchValue, setSearchValue] = useState("");
     const [error, setError] = useState(null);
 
+    const navigate = useNavigate();
+
     const searchPlayerByAllyCode = async (allyCode) =>{
         try {
             let req_url = `${api_url}/api/${allyCode}/create`;
             setLoading(true);    
             const response = await axios.post(req_url);
-            console.log(response.data);
-            setPlayer(response.data);
-            setLoading(false);
+            setPlayer(response.data.data);
+            navigate(`/player/${allyCode}`);
         } catch (error) {
             console.log(error.response.data);
-            setError(error.response.data);
+            setError(error.response.data.message);
             setLoading(false);
+            navigate(`/`);
         }
     } 
 
@@ -36,6 +39,7 @@ const MainProvider = ({children}) => {
         searchPlayerByAllyCode,
         search: [searchValue, setSearchValue],
         error: [error, setError],
+        navigate
     }
 
     // return provider
