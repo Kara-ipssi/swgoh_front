@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { MainContext } from "../../contexts";
 const Search = () => {
-    const {search, searchPlayerByAllyCode} = useContext(MainContext);
+    const {search, searchPlayerByAllyCode } = useContext(MainContext);
     
     const handleChange = (e) => {
         const value = e.target.value;
@@ -11,12 +11,14 @@ const Search = () => {
         search[1](limitedValue);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // verif if value is a number and has 9 digits
         if(search[0].length === 9){
             // search player by ally code
-            searchPlayerByAllyCode(search[0]);
+            await searchPlayerByAllyCode(search[0]);
+        }else{
+            alert("Ally code must be 9 digits");
         }
     }
     
