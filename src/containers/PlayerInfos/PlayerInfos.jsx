@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react'
-import { Tab, Dialog} from '@headlessui/react'
+import { Tab } from '@headlessui/react'
 
 import { MainContext} from "../../contexts";
 
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-// import { Modal } from '../../components';
+import { Modal } from '../../components';
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
@@ -12,7 +12,7 @@ const classNames = (...classes) => {
 
 
 const PlayerInfos = () => {
-    const { player } = useContext(MainContext);
+    const { player, allShips, allHeroes} = useContext(MainContext);
     const { heroes } = player[0];
     const { ships } = player[0];
     let [categories, setCategories] = useState({
@@ -36,7 +36,7 @@ const PlayerInfos = () => {
 
     const handleSort = (e) => {
         const sortValue = e.target.value;
-        console.log(sortValue);
+        // eslint-disable-next-line
         const fHeroes = [...heroes].sort((a, b) => {
             if (sortValue === 'name') {
                 return a.name.localeCompare(b.name);
@@ -45,6 +45,7 @@ const PlayerInfos = () => {
                 return b.power - a.power;
             }
         });
+        // eslint-disable-next-line
         const fShips = [...ships].sort((a, b) => {
             if (sortValue === 'name') {
                 return a.name.localeCompare(b.name);
@@ -66,10 +67,30 @@ const PlayerInfos = () => {
         });
     };
 
-    const [isOpen, setIsOpen] = useState(false)
+    const getUnitGeneralInfos = (unit) => {
+        if (!unit) return;
+        const {combat_type} = unit;
+        switch (combat_type) {
+            case 1:
+                return allHeroes[0].find((hero) => hero.base_id === unit.base_id);
+            case 2:
+                return allShips[0].find((ship) => ship.base_id === unit.base_id);
+            default:
+                break;
+        }
+    }
+
+    const [open, setOpen] = useState(false)
+    const [selectedUnit, setSelectedUnit] = useState(null)
+    // do modal logis here
+    const handleOpenModal = (unit) => {
+        setSelectedUnit(unit)
+        setOpen(true)
+    }
 
     return (
     <div className="w-full px-2 py-16 sm:px-0 ">
+        {open && <Modal open={open} setOpen={setOpen} selectedUnit={selectedUnit} unitOtherInfos={getUnitGeneralInfos(selectedUnit)}/>}
         <Tab.Group>
             <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
                 {Object.keys(categories).map((category) => (
@@ -123,7 +144,10 @@ const PlayerInfos = () => {
                         </div>
                         <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {units.map((unit) => (
-                                <li className="cursor-pointer col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-[1.05]  duration-300">
+
+                                <li className="cursor-pointer col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-[1.05]  duration-300"
+                                    onClick={() => handleOpenModal(unit)}
+                                >
                                     <div className="flex w-full items-center justify-between space-x-6 p-6">
                                         <div className="flex-1 truncate">
                                             <div className="flex items-center space-x-3">
@@ -134,7 +158,7 @@ const PlayerInfos = () => {
                                             </div>
                                             <p className="mt-1 truncate text-sm text-gray-500">Galactic power : {unit.power}</p>
                                         </div>
-                                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src="https://assets.swgoh.gg/files/assets/light-side.816929cef526dee2.jpg" alt="" />
+                                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={getUnitGeneralInfos(unit) ? getUnitGeneralInfos(unit).image : ''} alt="" />
                                     </div>
                                 </li>
                             ))}
