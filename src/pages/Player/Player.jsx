@@ -1,24 +1,28 @@
 import { useParams } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { MainContext} from "../../contexts";
 import { PlayerInfos } from "../../containers";
+import { Loader } from "../../components";
 const Player = () => {
     // get page params 
     const params = useParams();
     const { allyCode } = params;
 
+    const [loading, setLoading] = useState(true);
+
     const { player, searchPlayerByAllyCode} = useContext(MainContext);
 
     useEffect(() => {
+        setLoading(true);
         searchPlayerByAllyCode(allyCode);
-    }, [allyCode, searchPlayerByAllyCode]);
+        setLoading(false);
+    // eslint-disable-next-line
+    }, [allyCode]);
 
-
-
+    if(!player[0] || loading) return <Loader/>;
     return (
         <div className="flex-col relative items-center justify-center px-[150px] py-[100px]  space-y-[20px]">
-            {/* {console.log(player[0])} */}
             <a className="hover:text-[#51291E]" href={player[0].url} target="_blank" rel="noreferrer">
                 <h1 className="text-3xl text-center">
                     {player[0].pseudo} - {player[0].title}<br/>
@@ -69,9 +73,7 @@ const Player = () => {
                     </div>
                 </div>
             </div>
-            {/* <Example/> */}
             <PlayerInfos/>
-            
         </div>
     )
 }
