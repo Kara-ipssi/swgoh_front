@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: swgoh-front
+    image: swgoh-front
+    build:
+      context: .
+    ports:
+      - "3000:80"
