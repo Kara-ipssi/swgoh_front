@@ -1,7 +1,7 @@
 import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-export default function Modal({open, setOpen, selectedUnit, unitOtherInfos}) {
+export default function Modal({open, setOpen, selectedUnit}) {
   
 
     const cancelButtonRef = useRef(null)
@@ -41,7 +41,7 @@ export default function Modal({open, setOpen, selectedUnit, unitOtherInfos}) {
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                                 <div>
                                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={unitOtherInfos.image} alt="" />
+                                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={selectedUnit.image} alt="" />
                                     </div>
                                     <div className="mt-3 text-center sm:mt-5">
                                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
@@ -87,7 +87,7 @@ export default function Modal({open, setOpen, selectedUnit, unitOtherInfos}) {
                                                 </li>
                                                 
                                                 {
-                                                    selectedUnit.combat_type === 1 && (
+                                                    selectedUnit.combatType === 1 && (
                                                         <>
                                                             <li className="py-4 text-left">
                                                             Critical damage: <span className="text-blue-600">{stats['16']}</span>
