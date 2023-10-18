@@ -22,7 +22,7 @@ const MainProvider = ({children}) => {
         try {
             let req_url = `${api_url}/api/${allyCode}/create`;
             const response = await axios.post(req_url);
-            setPlayer(response.data.data);
+            setPlayer(response.data);
             navigate(`/player/${allyCode}`);
 
         } catch (error) {

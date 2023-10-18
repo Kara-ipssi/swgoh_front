@@ -12,9 +12,9 @@ const classNames = (...classes) => {
 
 
 const PlayerInfos = () => {
-    const { player, allShips, allHeroes} = useContext(MainContext);
-    const { heroes } = player[0];
-    const { ships } = player[0];
+    const { player } = useContext(MainContext);
+    const { heroes } = player[0].units;
+    const { ships } = player[0].units;
     let [categories, setCategories] = useState({
         Heroes: heroes,
         Ships: ships,
@@ -67,19 +67,6 @@ const PlayerInfos = () => {
         });
     };
 
-    const getUnitGeneralInfos = (unit) => {
-        if (!unit) return;
-        const {combat_type} = unit;
-        switch (combat_type) {
-            case 1:
-                return allHeroes[0].find((hero) => hero.base_id === unit.base_id);
-            case 2:
-                return allShips[0].find((ship) => ship.base_id === unit.base_id);
-            default:
-                break;
-        }
-    }
-
     const [open, setOpen] = useState(false)
     const [selectedUnit, setSelectedUnit] = useState(null)
     // do modal logis here
@@ -90,7 +77,7 @@ const PlayerInfos = () => {
 
     return (
     <div className="w-full px-2 py-16 sm:px-0 ">
-        {open && <Modal open={open} setOpen={setOpen} selectedUnit={selectedUnit} unitOtherInfos={getUnitGeneralInfos(selectedUnit)}/>}
+        {open && <Modal open={open} setOpen={setOpen} selectedUnit={selectedUnit}/>}
         <Tab.Group>
             <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
                 {Object.keys(categories).map((category) => (
@@ -158,7 +145,7 @@ const PlayerInfos = () => {
                                             </div>
                                             <p className="mt-1 truncate text-sm text-gray-500">Galactic power : {unit.power}</p>
                                         </div>
-                                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={getUnitGeneralInfos(unit) ? getUnitGeneralInfos(unit).image : ''} alt="" />
+                                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={unit.image ? unit.image : ''} alt="" />
                                     </div>
                                 </li>
                             ))}
